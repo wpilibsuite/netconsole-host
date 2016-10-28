@@ -1,0 +1,11 @@
+Package: netconsole-host
+Version: 1.2
+Depends: libc6 (>= 2.21), libstdc++6 (>= 4.9.2)
+Description: NetConsole launcher
+ This package provides the NetConsole launcher to send a program's standard
+ input and output over NetConsole
+Section: utils
+Priority: optional
+Maintainer: WPILib Developers <wpilib@wpi.edu>
+License: GPL
+Architecture: cortexa9-vfpv3

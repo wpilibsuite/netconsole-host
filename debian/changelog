@@ -1,0 +1,17 @@
+netconsole-launcher (1.2) stable; urgency=medium
+
+  * Update for 2016
+
+ -- Patrick Plenefisch <phplenefisch@wpi.edu>  Wed, 07 Oct 2015 19:21:31 -0400
+
+netconsole-launcher (1.1) stable; urgency=low
+
+  * Disable all buffering
+
+ -- Patrick Plenefisch <phplenefisch@wpi.edu>  Fri, 16 Jan 2015 20:10:02 -0500
+
+netconsole-launcher (1.0) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Patrick Plenefisch <phplenefisch@wpi.edu>  Fri, 10 Oct 2014 20:43:09 -0400

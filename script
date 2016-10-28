@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "hello!"
+
+while read p; do
+  echo "You said: " $p
+  echo "and on The Err $p" >&2
+  if [ "x$p" == "xexit" ]; then exit; fi
+  
+done 

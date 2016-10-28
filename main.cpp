@@ -9,20 +9,18 @@
 #include <unistd.h>
 #include <vector>
 
-using namespace std;
-
 const int NETCONSOLE_PORT = 6666;
 const int NETCONSOLE_IN_PORT = 6667;
-const streamsize BUFFER_SIZE = 512;
+const std::streamsize BUFFER_SIZE = 512;
 
-typedef vector<decltype(in_addr().s_addr)> addr_vector;
+typedef std::vector<decltype(in_addr().s_addr)> addr_vector;
 
 /**
  * There are way too many points of failure, so this is used to die
  */
-class nec_error : public exception {
+class nec_error : public std::exception {
  public:
-  nec_error(string name) : exception() { perror(name.c_str()); }
+  nec_error(std::string name) : exception() { perror(name.c_str()); }
 };
 
 addr_vector broadcast_addrs() {
@@ -150,12 +148,12 @@ class pipeset {
 };
 
 int forkChild(int argc, char* argv[]) {
-  cout << "➔ Launching «'" << argv[1];
+  std::cout << "➔ Launching «'" << argv[1];
   for (int i = 2; i < argc; i++) {
-    cout << "' '" << argv[i];
+    std::cout << "' '" << argv[i];
   }
-  cout << "'»" << endl;
-  cout.flush();
+  std::cout << "'»" << std::endl;
+  std::cout.flush();
 
   execvp(argv[1], &argv[1]);
 
@@ -165,7 +163,7 @@ int forkChild(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
   if (argc < 2) {
-    cout << argv[0] << " program [arguments ...]" << endl;
+    std::cout << argv[0] << " program [arguments ...]" << std::endl;
     return 1;
   }
 
@@ -189,7 +187,7 @@ int main(int argc, char* argv[]) {
     // create the file descriptor lists
     fd_set fds;
     FD_ZERO(&fds);
-    int maxfd = max(raw_socket, pipes.read_fd()) + 1;
+    int maxfd = std::max(raw_socket, pipes.read_fd()) + 1;
     char buffer[BUFFER_SIZE];
 
     setlinebuf(stdin);
@@ -210,7 +208,8 @@ int main(int argc, char* argv[]) {
           return 0;  // closed pipe
         else if (len < 0)
           throw nec_error("read");
-        cout.write(buffer, len);  // TODO: we might want to make this optional
+        // TODO: we might want to make this optional
+        std::cout.write(buffer, len);
         socket.write(buffer, static_cast<size_t>(len));
       }
 

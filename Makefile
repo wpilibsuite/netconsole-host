@@ -3,7 +3,7 @@ CXXFLAGS=-std=c++11 -Werror -Wextra -pedantic -O2
 
 .DUMMY: ipk clean
 
-netconsole-host: main.cpp
+netconsole-host: src/main.cpp
 	${CXX} ${CXXFLAGS} -o $@ $<
 
 netconsole-host.ipk: netconsole-host debian/control debian/changelog debian/copyright

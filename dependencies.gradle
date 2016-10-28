@@ -1,0 +1,50 @@
+task downloadWpiUtil() {
+    description = 'Downloads the C++ ARM wpiutil maven dependency.'
+    group = 'WPILib'
+    def depFolder = "$buildDir/dependencies"
+    def utilZip = file("$depFolder/wpiutil.zip")
+    outputs.file(utilZip)
+    def armWpiUtil
+
+    doFirst {
+        def armWpiUtilDependency = project.dependencies.create("edu.wpi.first.wpilib:wpiutil:+:arm@zip")
+        def armWpiUtilConfig = project.configurations.detachedConfiguration(armWpiUtilDependency)
+        armWpiUtilConfig.setTransitive(false)
+        armWpiUtil = armWpiUtilConfig.files[0].canonicalFile
+    }
+
+    doLast {
+        copy {
+            from armWpiUtil
+            rename 'wpiutil(.+)', 'wpiutil.zip'
+            into depFolder
+        }
+    }
+}
+
+def wpiUtilUnzipLocation = "$buildDir/wpiutil"
+
+// Create a task that will unzip the wpiutil files into a temporary build directory
+task unzipWpiUtil(type: Copy) {
+    description = 'Unzips the wpiutil maven dependency so that the include files and libraries can be used'
+    group = 'WPILib'
+    dependsOn downloadWpiUtil
+
+    from zipTree(downloadWpiUtil.outputs.files.singleFile)
+    into wpiUtilUnzipLocation
+}
+
+ext.defineWpiUtilProperties = {
+    ext.wpiUtil = wpiUtilUnzipLocation
+    ext.wpiUtilInclude = "$wpiUtilUnzipLocation/include"
+    ext.wpiUtilLibArmLocation = "$wpiUtilUnzipLocation/Linux/arm"
+    ext.wpiUtilSharedLib = "$wpiUtilLibArmLocation/libwpiutil.so"
+    ext.wpiUtilSharedLibDebug = "$wpiUtilLibArmLocation/libwpiutil.so.debug"
+    ext.addWpiUtilLibraryLinks = { compileTask, linker, targetPlatform ->
+        compileTask.dependsOn project(':').unzipWpiUtil
+        String architecture = targetPlatform.architecture
+        if (architecture.contains('arm')) {
+            linker.args wpiUtilSharedLib
+        }
+    }
+}

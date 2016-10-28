@@ -9,9 +9,9 @@
 #include <unistd.h>
 #include <vector>
 
-const int NETCONSOLE_PORT = 6666;
-const int NETCONSOLE_IN_PORT = 6667;
-const std::streamsize BUFFER_SIZE = 512;
+constexpr int NETCONSOLE_PORT = 6666;
+constexpr int NETCONSOLE_IN_PORT = 6667;
+constexpr std::streamsize BUFFER_SIZE = 512;
 
 typedef std::vector<decltype(in_addr().s_addr)> addr_vector;
 
